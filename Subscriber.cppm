@@ -9,6 +9,8 @@ module;
 
 #include <cstddef>
 
+#include <type_traits>
+
 export module rmdev.messageManager.subscriber;
 
 import emdevif.container.messageQueue;
@@ -20,32 +22,41 @@ using emdevif::MessageQueueTimeout_t;
 
 export namespace rmdev {
 
-template<typename T, class QueueImpl>
+template<typename ViewType_, class QueueImpl>
     requires(emdevif::ValidMessageQueue<QueueImpl> || emdevif::ValidMessageSlot<QueueImpl>)
 class Subscriber
 {
 public:
-    using ValueType = T;
+    using ViewType = ViewType_;
 
     static constexpr bool is_queue_not_slot = emdevif::IsMessageQueue_v<QueueImpl>;
+
+    using ValueType = QueueImpl::ValueType;
+
+    static_assert(std::is_convertible_v<ValueType, ViewType>, "`ValueType\' should be convertable to `ViewType\'");
+
+    static constexpr bool view_type_equals_to_value_type = std::is_same_v<ValueType, ViewType>;
 
 private:
     QueueImpl& queue_;
 
-    using QueueType_ = QueueImpl::ValueType;
-
 public:
     explicit Subscriber(QueueImpl& queue) : queue_(queue) {}
 
-    ErrorCode pop(bool in_isr, ValueType& data, MessageQueueTimeout_t timeout_tick = 0U)
+    ErrorCode pop(bool in_isr, ViewType& data, MessageQueueTimeout_t timeout_tick = 0U)
     {
         if constexpr (is_queue_not_slot) {
-            QueueType_ origin_data;
+            if constexpr (!view_type_equals_to_value_type) {
+                ValueType origin_data;
 
-            auto ret = queue_.pop(in_isr, origin_data, timeout_tick);
-            data = static_cast<ValueType>(origin_data);
+                auto ret = queue_.pop(in_isr, origin_data, timeout_tick);
+                data = static_cast<ViewType>(origin_data);
 
-            return ret;
+                return ret;
+            }
+            else {
+                return queue_.pop(in_isr, data, timeout_tick);
+            }
         }
         else {
             EMDEVIF_FATAL_HANDLER("It's message slot, method 'pop' was not supported. Please use 'peek' instead.");
@@ -61,14 +72,19 @@ public:
         }
     }
 
-    ErrorCode peek(bool in_isr, ValueType& data, MessageQueueTimeout_t timeout_tick = 0U)
+    ErrorCode peek(bool in_isr, ViewType& data, MessageQueueTimeout_t timeout_tick = 0U)
     {
-        QueueType_ origin_data;
+        if constexpr (!view_type_equals_to_value_type) {
+            ValueType origin_data;
 
-        auto ret = queue_.peek(in_isr, origin_data, timeout_tick);
-        data = static_cast<ValueType>(origin_data);
+            auto ret = queue_.peek(in_isr, origin_data, timeout_tick);
+            data = static_cast<ViewType>(origin_data);
 
-        return ret;
+            return ret;
+        }
+        else {
+            return queue_.peek(in_isr, data, timeout_tick);
+        }
     }
 
     void clear()

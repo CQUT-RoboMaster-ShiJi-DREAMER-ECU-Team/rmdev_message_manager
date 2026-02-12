@@ -11,6 +11,7 @@ module;
 #include <cstdint>
 
 #include <string_view>
+#include <memory>
 #include <vector>
 #include <utility>
 
