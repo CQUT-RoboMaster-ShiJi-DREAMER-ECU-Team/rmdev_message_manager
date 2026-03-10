@@ -11,9 +11,14 @@ module;
 #include <vector>
 #include <type_traits>
 
-export module rmdev.messageManager;
+#define EMDEVIF_MODULE_INTERFACE_UNIT
 
-export namespace rmdev {
+export module rmdev.message_manager;
+export import rmdev.message_manager.subscriber;
+export import rmdev.message_manager.topic;
 
+#ifdef __clang__
+    #pragma clang diagnostic ignored "-Winclude-angled-in-module-purview"
+#endif
 
-}  // namespace rmdev
+#include "rmdev/message_manager.hpp"
