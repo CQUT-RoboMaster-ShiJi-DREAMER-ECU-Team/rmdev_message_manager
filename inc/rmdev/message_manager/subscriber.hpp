@@ -24,6 +24,11 @@
 EMDEVIF_MODULE_EXPORT
 namespace rmdev {
 
+/**
+ * @brief 消息订阅者，提供 pop/peek 等接口从消息队列或消息槽中读取数据
+ * @tparam ViewType_ 用户视角的数据类型
+ * @tparam QueueImpl 底层队列/槽实现类型
+ */
 template<typename ViewType_, class QueueImpl>
     requires(emdevif::ValidMessageQueue<QueueImpl> || emdevif::ValidMessageSlot<QueueImpl>)
 class Subscriber
@@ -45,6 +50,13 @@ private:
 public:
     explicit Subscriber(QueueImpl& queue) : queue_(queue) {}
 
+    /**
+     * @brief 从队列中弹出数据（仅消息队列支持，消息槽不支持）
+     * @param in_isr 是否在中断上下文中调用
+     * @param[out] data 接收消息数据的引用
+     * @param timeout_tick 超时时间（tick 数），默认 0 表示不等待
+     * @return 错误码
+     */
     emdevif::ErrorCode pop(bool in_isr, ViewType& data, emdevif::MessageQueueTimeout_t timeout_tick = 0U)
     {
         if constexpr (is_queue_not_slot) {
@@ -64,6 +76,12 @@ public:
             EMDEVIF_FATAL_HANDLER("It's message slot, method 'pop' was not supported. Please use 'peek' instead.");
         }
     }
+    /**
+     * @overload
+     * @brief 从队列中弹出并丢弃一条消息（仅消息队列支持）
+     * @param in_isr 是否在中断上下文中调用
+     * @return 错误码
+     */
     emdevif::ErrorCode pop(bool in_isr)
     {
         if constexpr (is_queue_not_slot) {
@@ -74,6 +92,13 @@ public:
         }
     }
 
+    /**
+     * @brief 从队列/槽中读取数据但不移除（peek）
+     * @param in_isr 是否在中断上下文中调用
+     * @param[out] data 接收消息数据的引用
+     * @param timeout_tick 超时时间（tick 数），默认 0 表示不等待
+     * @return 错误码
+     */
     emdevif::ErrorCode peek(bool in_isr, ViewType& data, emdevif::MessageQueueTimeout_t timeout_tick = 0U)
     {
         if constexpr (!view_type_equals_to_value_type) {
@@ -89,35 +114,62 @@ public:
         }
     }
 
+    /**
+     * @brief 清空队列/槽中的所有消息
+     */
     void clear()
     {
         queue_.clear();
     }
 
+    /**
+     * @brief 获取队列/槽中已存储的消息数量
+     * @return 消息数量
+     */
     [[nodiscard]] std::size_t storeCount() const
     {
         return queue_.storeCount();
     }
 
+    /**
+     * @brief 获取队列/槽的剩余可用容量
+     * @return 剩余容量
+     */
     [[nodiscard]] std::size_t remainCount() const
     {
         return queue_.remainCount();
     }
 
+    /**
+     * @brief 获取队列/槽的最大容量
+     * @return 最大容量
+     */
     [[nodiscard]] static constexpr std::size_t maxItemCount()
     {
         return QueueImpl::item_size;
     }
 
+    /**
+     * @brief 获取底层队列/槽的操作句柄
+     * @return 句柄指针
+     */
     [[nodiscard]] void* getHandle() const
     {
         return queue_.getHandle();
     }
 
+    /**
+     * @brief 获取底层队列/槽实例的引用
+     * @return 队列/槽实例引用
+     */
     [[nodiscard]] QueueImpl& getQueueInstance()
     {
         return queue_;
     }
+    /**
+     * @brief 获取底层队列/槽实例的常量引用
+     * @return 队列/槽实例常量引用
+     */
     [[nodiscard]] const QueueImpl& getQueueInstance() const
     {
         return queue_;
