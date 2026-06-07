@@ -20,7 +20,6 @@ module;
 export module rmdev.message_manager.topic;
 
 import emdevif.core.data_container.message_queue;
-import emdevif.core.data_container.message_slot;
 import emdevif.core.error_handler;
 import rmdev.message_manager.subscriber;
 

@@ -14,8 +14,7 @@
 
         #include "emdevif/core/error_handler.hpp"
         #include "emdevif/core/data_container/message_queue.hpp"
-        #include "emdevif/core/data_container/message_slot.hpp"
-
+        
         #include <cstddef>
 
         #include <type_traits>
@@ -29,14 +28,13 @@ namespace rmdev {
  * @tparam ViewType_ 用户视角的数据类型
  * @tparam QueueImpl 底层队列/槽实现类型
  */
-template<typename ViewType_, class QueueImpl>
-    requires(emdevif::ValidMessageQueue<QueueImpl> || emdevif::ValidMessageSlot<QueueImpl>)
+template<typename ViewType_, emdevif::MessageSlot QueueImpl>
 class Subscriber
 {
 public:
     using ViewType = ViewType_;
 
-    static constexpr bool is_queue_not_slot = emdevif::IsMessageQueue_v<QueueImpl>;
+    static constexpr bool is_queue_not_slot = emdevif::MessageQueue<QueueImpl>;
 
     using ValueType = QueueImpl::ValueType;
 

@@ -14,7 +14,6 @@
 
         #include "emdevif/core/error_handler.hpp"
         #include "emdevif/core/data_container/message_queue.hpp"
-        #include "emdevif/core/data_container/message_slot.hpp"
         #include "rmdev/message_manager/subscriber.hpp"
 
         #include <cstddef>
@@ -34,8 +33,7 @@ namespace rmdev {
  * @tparam QueueImpl 底层队列/槽实现类型
  * @tparam Allocator 分配器类型，默认为 std::allocator
  */
-template<class QueueImpl, template<typename AllocatorType> typename Allocator = std::allocator>
-    requires(emdevif::ValidMessageQueue<QueueImpl> || emdevif::ValidMessageSlot<QueueImpl>)
+template<emdevif::MessageSlot QueueImpl, template<typename AllocatorType> typename Allocator = std::allocator>
 class Topic
 {
 public:
@@ -43,7 +41,7 @@ public:
 
     static constexpr std::size_t queue_item_size = QueueImpl::item_size;
 
-    static constexpr bool is_queue_not_slot = emdevif::IsMessageQueue_v<QueueImpl>;
+    static constexpr bool is_queue_not_slot = emdevif::MessageQueue<QueueImpl>;
 
     using QueueListType = std::vector<QueueImpl, Allocator<QueueImpl>>;
     using QueueListIterator = QueueListType::iterator;
