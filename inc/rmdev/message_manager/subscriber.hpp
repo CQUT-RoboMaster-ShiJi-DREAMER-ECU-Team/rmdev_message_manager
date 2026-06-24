@@ -7,9 +7,8 @@
 #ifndef RMDEV_MESSAGE_MANAGER_SUBSCRIBER_HPP
     #define RMDEV_MESSAGE_MANAGER_SUBSCRIBER_HPP
 
-    #include "emdevif/core/detail/config.hpp"
 
-    #ifndef EMDEVIF_MODULE_INTERFACE_UNIT
+
         #include "emdevif/core/fatal_handler.h"
 
         #include "emdevif/core/error_handler.hpp"
@@ -18,9 +17,6 @@
         #include <cstddef>
 
         #include <type_traits>
-    #endif
-
-EMDEVIF_MODULE_EXPORT
 namespace rmdev {
 
 /**
