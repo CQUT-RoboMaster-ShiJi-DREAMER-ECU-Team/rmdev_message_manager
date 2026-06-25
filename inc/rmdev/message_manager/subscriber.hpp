@@ -5,18 +5,16 @@
 
 #pragma once
 #ifndef RMDEV_MESSAGE_MANAGER_SUBSCRIBER_HPP
-    #define RMDEV_MESSAGE_MANAGER_SUBSCRIBER_HPP
+#define RMDEV_MESSAGE_MANAGER_SUBSCRIBER_HPP
 
+#include <cstddef>
 
+#include <type_traits>
 
-        #include <cstddef>
+#include "emdevif/core/fatal_handler.h"
 
-        #include <type_traits>
-
-        #include "emdevif/core/fatal_handler.h"
-
-        #include "emdevif/core/data_container/message_queue.hpp"
-        #include "emdevif/core/error_handler.hpp"
+#include "emdevif/core/data_container/message_queue.hpp"
+#include "emdevif/core/error_handler.hpp"
 
 namespace rmdev {
 

@@ -10,5 +10,5 @@ module;
 export module rmdev.message_manager.subscriber;
 
 export namespace rmdev {
-    using ::rmdev::Subscriber;
+using ::rmdev::Subscriber;
 }

@@ -5,23 +5,21 @@
 
 #pragma once
 #ifndef RMDEV_MESSAGE_MANAGER_TOPIC_HPP
-    #define RMDEV_MESSAGE_MANAGER_TOPIC_HPP
+#define RMDEV_MESSAGE_MANAGER_TOPIC_HPP
 
+#include <cstddef>
+#include <cstdint>
 
+#include <memory>
+#include <string_view>
+#include <utility>
+#include <vector>
 
-        #include <cstddef>
-        #include <cstdint>
+#include "emdevif/core/fatal_handler.h"
 
-        #include <memory>
-        #include <string_view>
-        #include <utility>
-        #include <vector>
-
-        #include "emdevif/core/fatal_handler.h"
-
-        #include "emdevif/core/data_container/message_queue.hpp"
-        #include "emdevif/core/error_handler.hpp"
-        #include "rmdev/message_manager/subscriber.hpp"
+#include "emdevif/core/data_container/message_queue.hpp"
+#include "emdevif/core/error_handler.hpp"
+#include "rmdev/message_manager/subscriber.hpp"
 
 namespace rmdev {
 

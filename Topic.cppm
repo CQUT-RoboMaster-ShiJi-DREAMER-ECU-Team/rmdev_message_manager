@@ -10,5 +10,5 @@ module;
 export module rmdev.message_manager.topic;
 
 export namespace rmdev {
-    using ::rmdev::Topic;
+using ::rmdev::Topic;
 }
