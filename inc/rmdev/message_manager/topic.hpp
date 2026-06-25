@@ -9,19 +9,20 @@
 
 
 
-        #include "emdevif/core/fatal_handler.h"
-
-        #include "emdevif/core/error_handler.hpp"
-        #include "emdevif/core/data_container/message_queue.hpp"
-        #include "rmdev/message_manager/subscriber.hpp"
-
         #include <cstddef>
         #include <cstdint>
 
-        #include <string_view>
         #include <memory>
-        #include <vector>
+        #include <string_view>
         #include <utility>
+        #include <vector>
+
+        #include "emdevif/core/fatal_handler.h"
+
+        #include "emdevif/core/data_container/message_queue.hpp"
+        #include "emdevif/core/error_handler.hpp"
+        #include "rmdev/message_manager/subscriber.hpp"
+
 namespace rmdev {
 
 /**

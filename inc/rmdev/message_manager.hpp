@@ -9,14 +9,15 @@
 
 
 
-        #include "rmdev/message_manager/subscriber.hpp"
-        #include "rmdev/message_manager/topic.hpp"
-
         #include <cstddef>
 
         #include <string_view>
-        #include <vector>
         #include <type_traits>
+        #include <vector>
+
+        #include "rmdev/message_manager/subscriber.hpp"
+        #include "rmdev/message_manager/topic.hpp"
+
 namespace rmdev {
 
 }  // namespace rmdev

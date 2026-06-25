@@ -9,14 +9,15 @@
 
 
 
-        #include "emdevif/core/fatal_handler.h"
-
-        #include "emdevif/core/error_handler.hpp"
-        #include "emdevif/core/data_container/message_queue.hpp"
-        
         #include <cstddef>
 
         #include <type_traits>
+
+        #include "emdevif/core/fatal_handler.h"
+
+        #include "emdevif/core/data_container/message_queue.hpp"
+        #include "emdevif/core/error_handler.hpp"
+
 namespace rmdev {
 
 /**
